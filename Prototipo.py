@@ -1,3 +1,6 @@
+import telegram
+
+
 
 # METODO
 # OUTPUT DELLE NOTE
@@ -170,3 +173,35 @@ if not entr_post_usc_antic:
 
 else:
     print(entr_post_usc_antic)
+
+
+# ======================================================================================
+
+# METODO 
+# OUTPUT INVIA RAW API A TELEGRAM
+
+# Request della pagina html
+req = requests.get(_base_url)
+
+# Parser della pagina html in BeautifulSoup
+soup = bs(req.content, "html.parser")
+
+
+# Restituisce tutte le tabelle nella pagina
+tables = soup.findAll("table")
+
+# tables[0] rappresenza la tabella "Note XX-XX-XXXX"
+tr = tables[0].findAll("tr")
+
+# Lambda array dei docenti assenti del giorno XX-XX-XXXX
+array_note = [x.text for x in tr]
+
+# Invia delle note tramite Telegram
+if (len(array_note) == 1):
+    print("Nessuna nota.")
+
+# Rimozione del primo elemento rappresentante l'haeder della tabella corrente
+else: 
+    array_note.pop(0)
+    print(array_note)
+

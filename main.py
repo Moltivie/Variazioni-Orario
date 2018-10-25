@@ -1,4 +1,4 @@
-import requests, os, sys
+import requests, os, sys, telegram
 from bs4 import BeautifulSoup as bs
 
 
@@ -6,6 +6,10 @@ from bs4 import BeautifulSoup as bs
 class FauserCrawlr(object):
 
     def __init__(self):
+        # Setup Telegram
+        self.bot = telegram.Bot("721669069:AAETWLPWmWxv90l7NpN1KL9uClZ8VHrrs7M")
+        self.chat_id = 8569428
+
         self._base_url = "http://www.fauser.gov.it/area-studenti/2-uncategorised/132-variazione-orario"
         # Request della pagina html
         self.req = requests.get(self._base_url)
@@ -17,6 +21,7 @@ class FauserCrawlr(object):
 
     def CrawlNote(self):
         
+        
         # tables[0] rappresenza la tabella "Note XX-XX-XXXX"
         tr = self.tables[0].findAll("tr")
 
@@ -25,14 +30,13 @@ class FauserCrawlr(object):
 
         # Stampa delle note
         if (len(array_note) == 1):
-            print("Nessuna nota.")
-            os.system("pause")
+            # print("Nessuna nota.")
+            return "Nessuna nota."
 
         # Rimozione del primo elemento rappresentante l'haeder della tabella corrente
         else: 
             array_note.pop(0)
-            print([x for x in array_note])
-            os.system("pause")
+            return [x for x in array_note]
 
 
     def CrawlProfessori(self):
@@ -50,11 +54,9 @@ class FauserCrawlr(object):
         # Stampa dei docenti assenti
 
         if not array_assenze_docenti:
-            print("Nessun docente assente.")
-            os.system("pause")
+            return "Nessun docente assente."
         else:
-            print(array_assenze_docenti)
-            os.system("pause")
+            return array_assenze_docenti
 
 
     def CrawlVariazioniGiorno(self):
@@ -72,12 +74,12 @@ class FauserCrawlr(object):
         # Stampa delle variazioni
 
         if not array_variazioni:
-            print("Nessuna variazione dell'orario.")
-            os.system("pause")
+            return "Nessuna variazione dell'orario."
+            
 
         else:
-            print(array_variazioni)
-            os.system("pause")
+            return array_variazioni
+            
 
 
     def CrawlVariazioniAule(self):
@@ -95,12 +97,11 @@ class FauserCrawlr(object):
         # Stampa delle sostituzioni aule
 
         if not array_sostituzione_aule:
-            print("Nessuna variazione delle aule.")
-            os.system("pause")
+            return "Nessuna variazione delle aule."
+            
 
         else:
-            print(array_sostituzione_aule)
-            os.system("pause")
+            return array_sostituzione_aule
 
 
     def CrawlEntratePostUsciteAntic(self):
@@ -118,12 +119,26 @@ class FauserCrawlr(object):
         # Stampa delle variazioni
 
         if not entr_post_usc_antic:
-            print("Nessuna nota sulle entrate posticipate e/o uscite anticipate.")
-            os.system("pause")
+            return "Nessuna nota sulle entrate posticipate e/o uscite anticipate."
+            
 
         else:
-            print(x for x in entr_post_usc_antic)
-            os.system("pause")
+            return [x for x in entr_post_usc_antic]
+
+
+    def InviaTelegram(self):
+        
+        self.bot.send_message(chat_id=self.chat_id, text=self.CrawlNote())
+        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        self.bot.send_message(chat_id=self.chat_id, text=self.CrawlProfessori())
+        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        self.bot.send_message(chat_id=self.chat_id, text=self.CrawlVariazioniGiorno())
+        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        self.bot.send_message(chat_id=self.chat_id, text=self.CrawlVariazioniAule())
+        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        self.bot.send_message(chat_id=self.chat_id, text=self.CrawlEntratePostUsciteAntic())
+        return "Done"
+        
 
 
 if __name__ == "__main__":
@@ -151,10 +166,12 @@ if __name__ == "__main__":
             [3] Visualizza le variazioni dell'orario
             [4] Visualizza le sostituzioni delle aule
             [5] Visualizza le entrate posticipate e le uscite anticipate
-            [9] Esci
+            [9] Invia a Telegram
+            [0] Esci
             """)
 
-        # Creo oggetto
+        # Creo oggetto + Settaggi
+        rawinput = 0
         obj = FauserCrawlr()
 
         try:
@@ -167,18 +184,25 @@ if __name__ == "__main__":
             os.system("cls")
 
             if(rawinput == 1):
-                obj.CrawlNote()
+                print(obj.CrawlNote())
+                os.system("pause")
             elif(rawinput == 2):
-                obj.CrawlProfessori()
+                print(obj.CrawlProfessori())
+                os.system("pause")
             elif(rawinput == 3):
-                obj.CrawlVariazioniGiorno()
+                print(obj.CrawlVariazioniGiorno())
+                os.system("pause")
             elif(rawinput == 4):
-                obj.CrawlVariazioniAule()
+                print(obj.CrawlVariazioniAule())
+                os.system("pause")
             elif(rawinput == 5):
-                obj.CrawlEntratePostUsciteAntic()
+                print(obj.CrawlEntratePostUsciteAntic())
+                os.system("pause")
             elif(rawinput == 9):
+                print(obj.InviaTelegram())
+                os.system("pause")
+            elif(rawinput == 0):
                 sys.exit()
-
 
 
 
