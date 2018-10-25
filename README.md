@@ -4,6 +4,14 @@ Questo script permette di avere un applicativo console che visualizza varie opzi
 
 <br />
 
+# Requisiti & Installazione
+
+- Python >= 3.6.2
+- Installare la libreria <b>requests</b>  |   ```pip install requests```
+- Installare la libreria <b>Beautiful</b>  |  ```pip install bs4```
+
+<br />
+
 # Info & Contatti
 
 Repo gestita da Aiman <br />
