@@ -129,13 +129,13 @@ class FauserCrawlr(object):
     def InviaTelegram(self):
         
         self.bot.send_message(chat_id=self.chat_id, text=self.CrawlNote())
-        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        # self.bot.send_message(chat_id=self.chat_id, text="-------------------")
         self.bot.send_message(chat_id=self.chat_id, text=self.CrawlProfessori())
-        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        # self.bot.send_message(chat_id=self.chat_id, text="-------------------")
         self.bot.send_message(chat_id=self.chat_id, text=self.CrawlVariazioniGiorno())
-        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        # self.bot.send_message(chat_id=self.chat_id, text="-------------------")
         self.bot.send_message(chat_id=self.chat_id, text=self.CrawlVariazioniAule())
-        self.bot.send_message(chat_id=self.chat_id, text="-------------------")
+        # self.bot.send_message(chat_id=self.chat_id, text="-------------------")
         self.bot.send_message(chat_id=self.chat_id, text=self.CrawlEntratePostUsciteAntic())
         return "Done"
         
